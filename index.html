@@ -15,6 +15,247 @@
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="styles.css" rel="stylesheet" />
+        
+        <!-- Chat Bot Styles -->
+        <style>
+            .chat-widget {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 9999;
+                font-family: 'Lato', sans-serif;
+            }
+            
+            .chat-bubble {
+                width: 60px;
+                height: 60px;
+                background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                transition: transform 0.3s, box-shadow 0.3s;
+            }
+            
+            .chat-bubble:hover {
+                transform: scale(1.1);
+                box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            }
+            
+            .chat-bubble i {
+                color: white;
+                font-size: 28px;
+            }
+            
+            .chat-window {
+                position: fixed;
+                bottom: 90px;
+                right: 20px;
+                width: 360px;
+                max-width: calc(100vw - 40px);
+                height: 500px;
+                max-height: calc(100vh - 140px);
+                background: white;
+                border-radius: 15px;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+                display: none;
+                flex-direction: column;
+                overflow: hidden;
+                animation: slideUp 0.3s ease-out;
+            }
+            
+            @keyframes slideUp {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            .chat-window.open {
+                display: flex;
+            }
+            
+            .chat-header {
+                background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+                color: white;
+                padding: 18px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .chat-header h3 {
+                margin: 0;
+                font-size: 18px;
+                font-weight: 700;
+            }
+            
+            .chat-header .status {
+                font-size: 12px;
+                opacity: 0.9;
+                margin-top: 3px;
+            }
+            
+            .close-chat {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 28px;
+                cursor: pointer;
+                padding: 0;
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                transition: background 0.3s;
+            }
+            
+            .close-chat:hover {
+                background: rgba(255,255,255,0.2);
+            }
+            
+            .chat-messages {
+                flex: 1;
+                overflow-y: auto;
+                padding: 20px;
+                background: #f8f9fa;
+            }
+            
+            .message {
+                margin-bottom: 15px;
+                display: flex;
+                gap: 10px;
+                animation: fadeIn 0.3s ease-out;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            .message.bot {
+                flex-direction: row;
+            }
+            
+            .message.user {
+                flex-direction: row-reverse;
+            }
+            
+            .message-avatar {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                font-size: 20px;
+            }
+            
+            .message.bot .message-avatar {
+                background: #1abc9c;
+                color: white;
+            }
+            
+            .message.user .message-avatar {
+                background: #2c3e50;
+                color: white;
+            }
+            
+            .message-content {
+                max-width: 75%;
+                padding: 12px 16px;
+                border-radius: 15px;
+                line-height: 1.5;
+                font-size: 14px;
+                white-space: pre-wrap;
+            }
+            
+            .message.bot .message-content {
+                background: white;
+                color: #2c3e50;
+                border-bottom-left-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .message.user .message-content {
+                background: #2c3e50;
+                color: white;
+                border-bottom-right-radius: 5px;
+            }
+            
+            .chat-input-area {
+                padding: 15px;
+                background: white;
+                border-top: 1px solid #e0e0e0;
+                display: flex;
+                gap: 10px;
+            }
+            
+            .chat-input-area input {
+                flex: 1;
+                border: 1px solid #ddd;
+                border-radius: 25px;
+                padding: 12px 20px;
+                font-size: 14px;
+                outline: none;
+            }
+            
+            .chat-input-area input:focus {
+                border-color: #1abc9c;
+            }
+            
+            .chat-input-area button {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                border: none;
+                background: #1abc9c;
+                color: white;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background 0.3s;
+            }
+            
+            .chat-input-area button:hover {
+                background: #16a085;
+            }
+            
+            .quick-replies {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                margin-top: 10px;
+            }
+            
+            .quick-reply {
+                background: white;
+                border: 1px solid #1abc9c;
+                color: #1abc9c;
+                padding: 8px 15px;
+                border-radius: 20px;
+                font-size: 13px;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+            
+            .quick-reply:hover {
+                background: #1abc9c;
+                color: white;
+            }
+            
+            @media (max-width: 768px) {
+                .chat-window {
+                    width: calc(100vw - 20px);
+                    right: 10px;
+                    bottom: 80px;
+                }
+            }
+        </style>
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -70,10 +311,9 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="lama.png" alt=Lama Engineering />
+                            <img class="img-fluid" src="lama.png" alt="Lama Engineering" />
                         </div>
                     </div>
-                    
                 </div>
             </div>
         </section>
@@ -90,13 +330,9 @@
                 </div>
                 <!-- About Section Content-->
                 <div class="row">
-                    <div class="col-lg-4 ms-auto"><p class="lead">I create websites that work as hard as you do. As a freelance web developer, I specialize in building fast, user-friendly sites designed to grow your business—whether you need more customer inquiries, increased sales, or a polished 
-                        online presence that matches your professional reputation.
-
-</p></div>
+                    <div class="col-lg-4 ms-auto"><p class="lead">I create websites that work as hard as you do. As a freelance web developer, I specialize in building fast, user-friendly sites designed to grow your business—whether you need more customer inquiries, increased sales, or a polished online presence that matches your professional reputation.</p></div>
                     <div class="col-lg-4 me-auto"><p class="lead">I also provide precise data annotation services, labeling and tagging datasets to train machine learning models more effectively and improve AI performance.</p></div>
                 </div>
-                <!-- About Section Button-->
             </div>
         </section>
         <!-- Contact Section-->
@@ -113,96 +349,41 @@
                 <!-- Contact Section Form-->
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-xl-7">
-                        <!-- * * * * * * * * * * * * * * *-->
-                        <!-- * * SB Forms Contact Form * *-->
-                        <!-- * * * * * * * * * * * * * * *-->
-                        <!-- This form is pre-integrated with SB Forms.-->
-                        <!-- To make this form functional, sign up at-->
-                        <!-- https://startbootstrap.com/solution/contact-forms-->
-                        <!-- to get an API token!-->
-                  <form id="contactForm" action="https://formspree.io/f/xeeoygan" method="POST">
-    <!-- Name input-->
-    <div class="form-floating mb-3">
-        <input class="form-control" id="name" name="name" type="text" placeholder="Enter your name..." required />
-        <label for="name">Full name</label>
-    </div>
-    <!-- Email address input-->
-    <div class="form-floating mb-3">
-        <input class="form-control" id="email" name="_replyto" type="email" placeholder="name@example.com" required />
-        <label for="email">Email address</label>
-    </div>
-    <!-- Phone number input-->
-    <div class="form-floating mb-3">
-        <input class="form-control" id="phone" name="phone" type="tel" placeholder="(123) 456-7890" required />
-        <label for="phone">Phone number</label>
-    </div>
-    <!-- Message input-->
-    <div class="form-floating mb-3">
-        <textarea class="form-control" id="message" name="message" placeholder="Enter your message here..." style="height: 10rem" required></textarea>
-        <label for="message">Message</label>
-    </div>
-    <!-- Submit success message-->
-    <div class="d-none" id="submitSuccessMessage">
-        <div class="text-center mb-3 alert alert-success">
-            <div class="fw-bolder">Form submission successful!</div>
-            Thank you for contacting me. I'll get back to you soon!
-        </div>
-    </div>
-    <!-- Submit error message-->
-    <div class="d-none" id="submitErrorMessage">
-        <div class="text-center mb-3 alert alert-danger">Error sending message! Please try again.</div>
-    </div>
-    <!-- Submit Button-->
-    <button class="btn btn-primary btn-xl" id="submitButton" type="submit">Send</button>
-</form>
-
-<script>
-    // Handle Formspree submission
-    const form = document.getElementById('contactForm');
-    const submitButton = document.getElementById('submitButton');
-    const successMessage = document.getElementById('submitSuccessMessage');
-    const errorMessage = document.getElementById('submitErrorMessage');
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Disable button and show loading state
-        submitButton.disabled = true;
-        submitButton.textContent = 'Sending...';
-        
-        // Hide any previous messages
-        successMessage.classList.add('d-none');
-        errorMessage.classList.add('d-none');
-        
-        // Submit form data
-        fetch(form.action, {
-            method: 'POST',
-            body: new FormData(form),
-            headers: {
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => {
-            if (response.ok) {
-                // Show success message
-                successMessage.classList.remove('d-none');
-                form.reset();
-            } else {
-                // Show error message
-                errorMessage.classList.remove('d-none');
-            }
-        })
-        .catch(error => {
-            // Show error message
-            errorMessage.classList.remove('d-none');
-        })
-        .finally(() => {
-            // Re-enable button
-            submitButton.disabled = false;
-            submitButton.textContent = 'Send';
-        });
-    });
-</script>
+                        <form id="contactForm" action="https://formspree.io/f/xeeoygan" method="POST">
+                            <!-- Name input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="name" name="name" type="text" placeholder="Enter your name..." required />
+                                <label for="name">Full name</label>
+                            </div>
+                            <!-- Email address input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="email" name="_replyto" type="email" placeholder="name@example.com" required />
+                                <label for="email">Email address</label>
+                            </div>
+                            <!-- Phone number input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="phone" name="phone" type="tel" placeholder="(123) 456-7890" required />
+                                <label for="phone">Phone number</label>
+                            </div>
+                            <!-- Message input-->
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control" id="message" name="message" placeholder="Enter your message here..." style="height: 10rem" required></textarea>
+                                <label for="message">Message</label>
+                            </div>
+                            <!-- Submit success message-->
+                            <div class="d-none" id="submitSuccessMessage">
+                                <div class="text-center mb-3 alert alert-success">
+                                    <div class="fw-bolder">Form submission successful!</div>
+                                    Thank you for contacting me. I'll get back to you soon!
+                                </div>
+                            </div>
+                            <!-- Submit error message-->
+                            <div class="d-none" id="submitErrorMessage">
+                                <div class="text-center mb-3 alert alert-danger">Error sending message! Please try again.</div>
+                            </div>
+                            <!-- Submit Button-->
+                            <button class="btn btn-primary btn-xl" id="submitButton" type="submit">Send</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -214,10 +395,7 @@
                     <!-- Footer Location-->
                     <div class="col-lg-4 mb-5 mb-lg-0">
                         <h4 class="text-uppercase mb-4">Location</h4>
-                        <p class="lead mb-0">
-                           Lusaka, Woodlands
-                            <br />                     
-                        </p>
+                        <p class="lead mb-0">Lusaka, Woodlands<br /></p>
                     </div>
                     <!-- Footer Social Icons-->
                     <div class="col-lg-4 mb-5 mb-lg-0">
@@ -231,7 +409,7 @@
                     <div class="col-lg-4">
                         <h4 class="text-uppercase mb-4"></h4>
                         <p class="lead mb-0">
-                            <a href="https://wa.me/message/NHKCJPSPW3EPL1 ">Call/Whatsap </a>
+                            <a href="https://wa.me/message/NHKCJPSPW3EPL1">Call/Whatsap</a>
                         </p>
                     </div>
                 </div>
@@ -241,7 +419,45 @@
         <div class="copyright py-4 text-center text-white">
             <div class="container"><small>Copyright &copy; https://waddyingtonm.github.io/site/ 2025</small></div>
         </div>
-        <!-- Portfolio Modals-->
+
+        <!-- Chat Widget -->
+        <div class="chat-widget">
+            <div class="chat-bubble" onclick="toggleChat()">
+                <i class="fas fa-comments"></i>
+            </div>
+            
+            <div class="chat-window" id="chatWindow">
+                <div class="chat-header">
+                    <div>
+                        <h3>💬 Chat Assistant</h3>
+                        <div class="status">🟢 Online - Here to help!</div>
+                    </div>
+                    <button class="close-chat" onclick="toggleChat()">&times;</button>
+                </div>
+                
+                <div class="chat-messages" id="messages">
+                    <div class="message bot">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-content">
+                            Hi! I'm Waddington's assistant. How can I help you today?
+                            <div class="quick-replies">
+                                <button class="quick-reply" onclick="sendQuick('Tell me about your services')">Services</button>
+                                <button class="quick-reply" onclick="sendQuick('What is your pricing?')">Pricing</button>
+                                <button class="quick-reply" onclick="sendQuick('How can I contact you?')">Contact</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter')sendMessage()">
+                    <button onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Portfolio Modal 1-->
         <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" aria-labelledby="portfolioModal1" aria-hidden="true">
             <div class="modal-dialog modal-xl">
@@ -251,17 +467,13 @@
                         <div class="container">
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
-                                    <!-- Portfolio Modal - Title-->
                                     <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lama Engineering</h2>
-                                    <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
                                         <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                                         <div class="divider-custom-line"></div>
                                     </div>
-                                    <!-- Portfolio Modal - Image-->
                                     <img class="img-fluid rounded mb-5" src="lama.png" alt="..." />
-                                    <!-- Portfolio Modal - Text-->
                                     <p class="mb-4">Lama Engineering provides a wide range of services from cutting-edge engineering solutions to high-quality construction servicing, and general supply</p>
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
                                         <i class="fas fa-xmark fa-fw"></i>
@@ -274,175 +486,192 @@
                 </div>
             </div>
         </div>
-        <!-- Portfolio Modal 2-->
-        <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" aria-labelledby="portfolioModal2" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                    <div class="modal-body text-center pb-5">
-                        <div class="container">
-                            <div class="row justify-content-center">
-                                <div class="col-lg-8">
-                                    <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Tasty Cake</h2>
-                                    <!-- Icon Divider-->
-                                    <div class="divider-custom">
-                                        <div class="divider-custom-line"></div>
-                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                        <div class="divider-custom-line"></div>
-                                    </div>
-                                    <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/cake.png" alt="..." />
-                                    <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
-                                    <button class="btn btn-primary" data-bs-dismiss="modal">
-                                        <i class="fas fa-xmark fa-fw"></i>
-                                        Close Window
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Portfolio Modal 3-->
-        <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" aria-labelledby="portfolioModal3" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                    <div class="modal-body text-center pb-5">
-                        <div class="container">
-                            <div class="row justify-content-center">
-                                <div class="col-lg-8">
-                                    <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Circus Tent</h2>
-                                    <!-- Icon Divider-->
-                                    <div class="divider-custom">
-                                        <div class="divider-custom-line"></div>
-                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                        <div class="divider-custom-line"></div>
-                                    </div>
-                                    <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/circus.png" alt="..." />
-                                    <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
-                                    <button class="btn btn-primary" data-bs-dismiss="modal">
-                                        <i class="fas fa-xmark fa-fw"></i>
-                                        Close Window
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Portfolio Modal 4-->
-        <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" aria-labelledby="portfolioModal4" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                    <div class="modal-body text-center pb-5">
-                        <div class="container">
-                            <div class="row justify-content-center">
-                                <div class="col-lg-8">
-                                    <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Controller</h2>
-                                    <!-- Icon Divider-->
-                                    <div class="divider-custom">
-                                        <div class="divider-custom-line"></div>
-                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                        <div class="divider-custom-line"></div>
-                                    </div>
-                                    <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/game.png" alt="..." />
-                                    <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
-                                    <button class="btn btn-primary" data-bs-dismiss="modal">
-                                        <i class="fas fa-xmark fa-fw"></i>
-                                        Close Window
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Portfolio Modal 5-->
-        <div class="portfolio-modal modal fade" id="portfolioModal5" tabindex="-1" aria-labelledby="portfolioModal5" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                    <div class="modal-body text-center pb-5">
-                        <div class="container">
-                            <div class="row justify-content-center">
-                                <div class="col-lg-8">
-                                    <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Locked Safe</h2>
-                                    <!-- Icon Divider-->
-                                    <div class="divider-custom">
-                                        <div class="divider-custom-line"></div>
-                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                        <div class="divider-custom-line"></div>
-                                    </div>
-                                    <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/safe.png" alt="..." />
-                                    <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
-                                    <button class="btn btn-primary" data-bs-dismiss="modal">
-                                        <i class="fas fa-xmark fa-fw"></i>
-                                        Close Window
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Portfolio Modal 6-->
-        <div class="portfolio-modal modal fade" id="portfolioModal6" tabindex="-1" aria-labelledby="portfolioModal6" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                    <div class="modal-body text-center pb-5">
-                        <div class="container">
-                            <div class="row justify-content-center">
-                                <div class="col-lg-8">
-                                    <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Submarine</h2>
-                                    <!-- Icon Divider-->
-                                    <div class="divider-custom">
-                                        <div class="divider-custom-line"></div>
-                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                        <div class="divider-custom-line"></div>
-                                    </div>
-                                    <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/submarine.png" alt="..." />
-                                    <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
-                                    <button class="btn btn-primary" data-bs-dismiss="modal">
-                                        <i class="fas fa-xmark fa-fw"></i>
-                                        Close Window
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <!-- Bootstrap core JS-->
-       
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="scripts.js"></script>
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <!-- * *                               SB Forms JS                               * *-->
-        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        
+        <!-- Chat Bot JavaScript -->
+        <script>
+            // Chat Bot Logic
+            function toggleChat() {
+                const chatWindow = document.getElementById('chatWindow');
+                chatWindow.classList.toggle('open');
+                if (chatWindow.classList.contains('open')) {
+                    document.getElementById('chatInput').focus();
+                }
+            }
+
+            function addMessage(content, isUser = false) {
+                const messagesDiv = document.getElementById('messages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+                
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">${isUser ? '👤' : '🤖'}</div>
+                    <div class="message-content">${content}</div>
+                `;
+                
+                messagesDiv.appendChild(messageDiv);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+
+            function getBotResponse(message) {
+                const msg = message.toLowerCase().trim();
+                
+                // Greetings
+                if (msg.match(/\b(hello|hi|hey|greetings)\b/)) {
+                    return "Hello! 👋 I'm here to help you learn more about Waddington's services. What would you like to know?";
+                }
+                
+                // Services
+                if (msg.includes('service') || msg.includes('what do you do') || msg.includes('what can you do')) {
+                    return `Waddington offers several services:
+
+🌐 Website Development - Custom, responsive websites
+📱 Web Applications - Interactive web apps
+🔍 SEO - Search engine optimization
+🤖 Chat Bots - AI-powered customer support
+☁️ Hosting - Reliable web hosting
+📊 AI/ML Data Tagging - Quality data annotation
+
+Would you like to know more about any specific service?`;
+                }
+                
+                // Pricing
+                if (msg.includes('price') || msg.includes('cost') || msg.includes('rate') || msg.includes('fee')) {
+                    return "Pricing varies based on project scope and requirements. I'd be happy to discuss your specific needs! Please use the contact form below or reach out via WhatsApp for a personalized quote. 💰";
+                }
+                
+                // Contact
+                if (msg.includes('contact') || msg.includes('reach') || msg.includes('phone') || msg.includes('email') || msg.includes('whatsapp')) {
+                    return `You can reach Waddington through:
+
+📧 Contact form on this page (scroll down)
+📱 WhatsApp: <a href="https://wa.me/message/NHKCJPSPW3EPL1" target="_blank">Click to chat</a>
+📍 Location: Lusaka, Woodlands
+
+I'm here to help answer any questions first!`;
+                }
+                
+                // Portfolio
+                if (msg.includes('portfolio') || msg.includes('work') || msg.includes('project') || msg.includes('example')) {
+                    return "Check out the Portfolio section above to see recent projects, including Lama Engineering! Each project showcases custom web solutions tailored to client needs. 🎨";
+                }
+                
+                // Website/Web development
+                if (msg.includes('website') || msg.includes('web dev') || msg.includes('web design')) {
+                    return "I specialize in creating fast, user-friendly websites that help grow businesses. Whether you need a simple landing page or a complex web application, I can build it! What type of website are you interested in? 🌐";
+                }
+                
+                // SEO
+                if (msg.includes('seo') || msg.includes('search engine') || msg.includes('google')) {
+                    return "SEO services help your website rank higher in search results, bringing more organic traffic and potential customers. This includes keyword optimization, technical SEO, and content strategy. 🔍";
+                }
+                
+                // Chatbot
+                if (msg.includes('chatbot') || msg.includes('chat bot') || msg.includes('bot')) {
+                    return "I can build intelligent chatbots like this one! They can handle customer inquiries 24/7, improve response times, and integrate with your website or social media. Perfect for customer support! 🤖";
+                }
+                
+                // Data tagging/ML
+                if (msg.includes('data') || msg.includes('tagging') || msg.includes('annotation') || msg.includes('ml') || msg.includes('machine learning')) {
+                    return "I provide precise data annotation services - labeling and tagging datasets to train machine learning models. This includes image labeling, text annotation, and more. Essential for AI development! 🏷️";
+                }
+                
+                // Timeline
+                if (msg.includes('how long') || msg.includes('timeline') || msg.includes('duration') || msg.includes('time')) {
+                    return "Project timelines vary based on complexity. A simple website might take 1-2 weeks, while complex applications can take 4-8 weeks or more. Let's discuss your specific needs to provide an accurate timeline! ⏱️";
+                }
+                
+                // Thanks
+                if (msg.match(/\b(thank|thanks|thx)\b/)) {
+                    return "You're very welcome! 😊 Feel free to ask if you have any other questions!";
+                }
+                
+                // Goodbye
+                if (msg.match(/\b(bye|goodbye|see you)\b/)) {
+                    return "Goodbye! Feel free to come back if you have more questions. Have a great day! 👋";
+                }
+                
+                // Help
+                if (msg.includes('help')) {
+                    return `I can help you with information about:
+
+• Services offered
+• Pricing and quotes
+• Contact information
+• Portfolio and past work
+• Project timelines
+
+What would you like to know?`;
+                }
+                
+                // Default response
+                return "I'm here to help with information about Waddington's web development services! Try asking about services, pricing, or contact information. You can also use the quick buttons above! 💬";
+            }
+
+            function sendMessage() {
+                const input = document.getElementById('chatInput');
+                const message = input.value.trim();
+                
+                if (!message) return;
+                
+                // Add user message
+                addMessage(message, true);
+                input.value = '';
+                
+                // Simulate thinking delay
+                setTimeout(() => {
+                    const response = getBotResponse(message);
+                    addMessage(response, false);
+                }, 500);
+            }
+
+            function sendQuick(message) {
+                document.getElementById('chatInput').value = message;
+                sendMessage();
+            }
+
+            // Form submission handler
+            const form = document.getElementById('contactForm');
+            const submitButton = document.getElementById('submitButton');
+            const successMessage = document.getElementById('submitSuccessMessage');
+            const errorMessage = document.getElementById('submitErrorMessage');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                submitButton.disabled = true;
+                submitButton.textContent = 'Sending...';
+                
+                successMessage.classList.add('d-none');
+                errorMessage.classList.add('d-none');
+                
+                fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        successMessage.classList.remove('d-none');
+                        form.reset();
+                    } else {
+                        errorMessage.classList.remove('d-none');
+                    }
+                })
+                .catch(error => {
+                    errorMessage.classList.remove('d-none');
+                })
+                .finally(() => {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Send';
+                });
+            });
+        </script>
     </body>
 </html>
